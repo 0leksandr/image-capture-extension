@@ -1,0 +1,24 @@
+{
+    "name": "image-capture-extension",
+    "version": "1.0",
+    "manifest_version": 2,
+    "description": "Your description",
+    "permissions": [
+        "contextMenus"
+    ],
+    "background": {
+        "scripts": ["script.js"]
+    },
+
+    "content_scripts": [
+        {
+            "matches": ["*://*/*"],
+            "js": [
+                "content_script.js"
+            ]
+        }
+    ],
+    "icons": {
+        "16": "camera.png"
+    }
+}
