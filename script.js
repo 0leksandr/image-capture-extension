@@ -3,6 +3,7 @@ const actions = {
     "Get image": "getImage",
     "Reload image": "reloadImage",
     "Hide image": "hideImage",
+    "Invert": "invert",
 };
 
 for (const action in actions) {

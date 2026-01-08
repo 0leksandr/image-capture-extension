@@ -43,6 +43,10 @@ class ImageElement {
         this.updateUrl('https://as2.ftcdn.net/v2/jpg/06/57/37/01/1000_F_657370150_pdNeG5pjI976ZasVbKN9VqH1rfoykdYU.jpg');
     }
 
+    invert() {
+        this.element.style.filter = "invert(90%) hue-rotate(0.5turn)";
+    }
+
     static canHandle(element) {
         throw new Error("canHandle() must be implemented by subclass");
     }
@@ -155,7 +159,7 @@ class BackgroundImageElement extends ImageElement {
 const IMAGE_ELEMENT_HANDLERS = [
     ImgSrcsetElement,
     ImgElement,
-    BackgroundImageElement
+    BackgroundImageElement,
 ];
 
 function createImageElement(element) {
@@ -174,25 +178,22 @@ function createImageElement(element) {
 }
 
 function getImage() {
-    const imageElement = createImageElement(clickedElement);
-    if (imageElement) {
-        const url = imageElement.locateImage();
-        if (url) window.setTimeout(() => window.open(url), 0);
-    }
+    window.setTimeout(
+        () => window.open(createImageElement(clickedElement).locateImage()),
+        0,
+    );
 }
 
 function reloadImage() {
-    const imageElement = createImageElement(clickedElement);
-    if (imageElement) {
-        imageElement.reloadImage();
-    }
+    createImageElement(clickedElement).reloadImage();
 }
 
 function hideImage() {
-    const imageElement = createImageElement(clickedElement);
-    if (imageElement) {
-        imageElement.hideImage();
-    }
+    createImageElement(clickedElement).hideImage();
+}
+
+function invert() {
+    createImageElement(clickedElement).invert();
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
@@ -200,6 +201,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         getImage,
         reloadImage,
         hideImage,
+        invert,
     }[request.action])();
 });
 
