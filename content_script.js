@@ -41,6 +41,8 @@ class ImageElement {
     hideImage() {
         // this.updateUrl('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg"%3E%3C/svg%3E');
         this.updateUrl('https://as2.ftcdn.net/v2/jpg/06/57/37/01/1000_F_657370150_pdNeG5pjI976ZasVbKN9VqH1rfoykdYU.jpg');
+
+        this.element.setAttribute("my-hidden-image", "");
     }
 
     invert() {
