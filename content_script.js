@@ -46,7 +46,7 @@ class ImageElement {
     }
 
     invert() {
-        this.element.style.filter = "invert(90%) hue-rotate(0.5turn)";
+        this.element.classList.toggle("my-inverted-image");
     }
 
     static canHandle(element) {
