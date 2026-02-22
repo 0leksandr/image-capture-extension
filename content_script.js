@@ -158,22 +158,22 @@ class BackgroundImageElement extends ImageElement {
     }
 }
 
-const IMAGE_ELEMENT_HANDLERS = [
-    ImgSrcsetElement,
-    ImgElement,
-    BackgroundImageElement,
-];
-
-function createImageElement(element) {
-    let currentElement = element;
-
-    while (currentElement && currentElement !== document.body) {
-        for (const Handler of IMAGE_ELEMENT_HANDLERS) {
-            if (Handler.canHandle(currentElement)) {
-                return new Handler(currentElement);
+function getImageElement() {
+    for (const child of [clickedElement].concat(Array.from(clickedElement.querySelectorAll("img")))) {
+        for (const handler of [ImgSrcsetElement, ImgElement]) {
+            if (handler.canHandle(child)) {
+                return new handler(child);
             }
         }
-        currentElement = currentElement.parentNode;
+    }
+
+    let parent = clickedElement;
+    while (parent && parent !== document.body) {
+        const handler = BackgroundImageElement;
+        if (handler.canHandle(parent)) {
+            return new handler(parent);
+        }
+        parent = parent.parentNode;
     }
 
     return null;
@@ -181,21 +181,21 @@ function createImageElement(element) {
 
 function getImage() {
     window.setTimeout(
-        () => window.open(createImageElement(clickedElement).locateImage()),
+        () => window.open(getImageElement().locateImage()),
         0,
     );
 }
 
 function reloadImage() {
-    createImageElement(clickedElement).reloadImage();
+    getImageElement().reloadImage();
 }
 
 function hideImage() {
-    createImageElement(clickedElement).hideImage();
+    getImageElement().hideImage();
 }
 
 function invert() {
-    createImageElement(clickedElement).invert();
+    getImageElement().invert();
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
