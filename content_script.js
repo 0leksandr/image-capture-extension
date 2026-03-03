@@ -179,7 +179,7 @@ function getImageElement() {
     return null;
 }
 
-function getImage() {
+function openImage() {
     window.setTimeout(
         () => window.open(getImageElement().locateImage()),
         0,
@@ -200,7 +200,7 @@ function invert() {
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     ({
-        getImage,
+        openImage,
         reloadImage,
         hideImage,
         invert,

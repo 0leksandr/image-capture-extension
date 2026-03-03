@@ -1,8 +1,8 @@
 
 const actions = {
-    "Get image": "getImage",
-    "Reload image": "reloadImage",
-    "Hide image": "hideImage",
+    "Open": "openImage",
+    "Reload": "reloadImage",
+    "Hide": "hideImage",
     "Invert": "invert",
 };
 
