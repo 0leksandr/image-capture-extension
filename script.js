@@ -4,8 +4,8 @@
 const actions = {
     "↗️ Open": "openImage",
     "🔄 Reload": "reloadImage",
-    "🚫 Hide": "hideImage",
-    "🌚 Invert": "invert",
+    "❌ Hide": "hideImage",
+    "🌗 Invert": "invert",
 };
 
 for (const action in actions) {
