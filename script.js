@@ -2,10 +2,10 @@
 // noinspection JSNonASCIINames
 
 const actions = {
+    "🌗 Invert": "invert",
+    "❌ Hide": "hideImage",
     "↗️ Open": "openImage",
     "🔄 Reload": "reloadImage",
-    "❌ Hide": "hideImage",
-    "🌗 Invert": "invert",
 };
 
 for (const action in actions) {
