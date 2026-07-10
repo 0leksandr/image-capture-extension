@@ -2,20 +2,21 @@
 // noinspection JSNonASCIINames
 
 const actions = {
-    "🌗 Invert": "invert",
+    "🌗 Invert": "invertImage",
     "❌ Hide": "hideImage",
     "↗️ Open": "openImage",
     "🔄 Reload": "reloadImage",
 };
 
-for (const action in actions) {
-    chrome.contextMenus.create({
-        title: action,
-        contexts: ["all"],
-        // onclick: actions[action],
-        id: actions[action],
-    });
-}
+chrome.runtime.onInstalled.addListener(() => {
+    for (const action in actions) {
+        chrome.contextMenus.create({
+            title: action,
+            contexts: ["all"],
+            id: actions[action],
+        });
+    }
+});
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
     chrome.tabs.sendMessage(tab.id, {"action": info.menuItemId});

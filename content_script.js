@@ -40,12 +40,12 @@ class ImageElement {
 
     hideImage() {
         // this.updateUrl('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg"%3E%3C/svg%3E');
-        this.updateUrl('https://as2.ftcdn.net/v2/jpg/06/57/37/01/1000_F_657370150_pdNeG5pjI976ZasVbKN9VqH1rfoykdYU.jpg');
+        // this.updateUrl('https://as2.ftcdn.net/v2/jpg/06/57/37/01/1000_F_657370150_pdNeG5pjI976ZasVbKN9VqH1rfoykdYU.jpg');
 
-        this.element.setAttribute("my-hidden-image", "");
+        this.element.toggleAttribute("my-hidden-image");
     }
 
-    invert() {
+    invertImage() {
         this.element.classList.toggle("my-inverted-image");
     }
 
@@ -194,8 +194,8 @@ function hideImage() {
     getImageElement().hideImage();
 }
 
-function invert() {
-    getImageElement().invert();
+function invertImage() {
+    getImageElement().invertImage();
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
@@ -203,7 +203,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         openImage,
         reloadImage,
         hideImage,
-        invert,
+        invertImage,
     }[request.action])();
 });
 
