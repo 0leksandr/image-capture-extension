@@ -1,13 +1,13 @@
 {
     "name": "image-capture-extension",
     "version": "1.0",
-    "manifest_version": 2,
+    "manifest_version": 3,
     "description": "Your description",
     "permissions": [
         "contextMenus"
     ],
     "background": {
-        "scripts": ["script.js"]
+        "service_worker": "script.js"
     },
 
     "content_scripts": [

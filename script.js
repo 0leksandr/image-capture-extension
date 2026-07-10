@@ -21,4 +21,4 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     chrome.tabs.sendMessage(tab.id, {"action": info.menuItemId});
 });
 
-console.log("started " + (new Date()).toISOString() + " " + window.location.href);
+console.log("started " + (new Date()).toISOString());
