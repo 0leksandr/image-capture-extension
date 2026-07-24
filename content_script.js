@@ -198,12 +198,61 @@ function invertImage() {
     getImageElement().invertImage();
 }
 
+function getPngFilename(url) {
+    try {
+        const pathname = new URL(url, window.location.href).pathname;
+        const base = pathname.substring(pathname.lastIndexOf('/') + 1) || 'image';
+        return base.replace(/\.[^./]+$/, '') + '.png';
+    } catch (e) {
+        return 'image.png';
+    }
+}
+
+function saveImageAsPng() {
+    const url = getImageElement().locateImage();
+    if (!url) return;
+
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+
+    img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        canvas.getContext("2d").drawImage(img, 0, 0);
+
+        try {
+            canvas.toBlob(blob => {
+                if (!blob) return;
+
+                const blobUrl = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = blobUrl;
+                link.download = getPngFilename(url);
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                URL.revokeObjectURL(blobUrl);
+            }, "image/png");
+        } catch (e) {
+            console.error("image-capture-extension: canvas is tainted, cannot export cross-origin image as PNG", url, e);
+        }
+    };
+
+    img.onerror = () => {
+        console.error("image-capture-extension: failed to load image for PNG conversion", url);
+    };
+
+    img.src = url;
+}
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     ({
         openImage,
         reloadImage,
         hideImage,
         invertImage,
+        saveImageAsPng,
     }[request.action])();
 });
 

@@ -4,6 +4,7 @@
 const actions = {
     "🌗 Invert": "invertImage",
     "❌ Hide": "hideImage",
+    "💾 Save": "saveImageAsPng",
     "↗️ Open": "openImage",
     "🔄 Reload": "reloadImage",
 };
