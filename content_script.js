@@ -159,8 +159,10 @@ class BackgroundImageElement extends ImageElement {
 }
 
 function getImageElement() {
-    for (const child of [clickedElement].concat(Array.from(clickedElement.querySelectorAll("img")))) {
-        for (const handler of [ImgSrcsetElement, ImgElement]) {
+    const handlers = [ImgSrcsetElement, ImgElement, BackgroundImageElement];
+
+    for (const child of [clickedElement].concat(Array.from(clickedElement.querySelectorAll("*")))) {
+        for (const handler of handlers) {
             if (handler.canHandle(child)) {
                 return new handler(child);
             }
@@ -169,14 +171,22 @@ function getImageElement() {
 
     let parent = clickedElement;
     while (parent && parent !== document.body) {
-        const handler = BackgroundImageElement;
-        if (handler.canHandle(parent)) {
-            return new handler(parent);
+        for (const handler of handlers) {
+            if (handler.canHandle(parent)) {
+                return new handler(parent);
+            }
+        }
+        for (const child of parent.childNodes) {
+            for (const handler of handlers) {
+                if (handler.canHandle(child)) {
+                    return new handler(child);
+                }
+            }
         }
         parent = parent.parentNode;
     }
 
-    return null;
+    throw new Error("Could not find image element");
 }
 
 function openImage() {
