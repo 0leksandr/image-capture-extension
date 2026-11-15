@@ -61,18 +61,9 @@ works for same-origin images or images served with permissive CORS headers; cros
 without CORS taint the canvas and `toBlob` throws, which is caught and logged rather than silently
 failing.
 
-## File encoding note
+## File encoding
 
-`content_script.js` has **mixed line endings** (mostly CRLF, with a few pre-existing stray LF-only
-lines) inherited from its edit history. When editing this file:
-- Never let an edit tool normalize untouched lines to a different line-ending style as a side
-  effect — verify with `git diff -U0 | grep '^-'` that no unintended lines were changed/deleted.
-- New lines must match the line-ending style of their immediate neighbors at the insertion point
-  (check the line directly above/below with `cat -A`/`grep -c $'\r'`), not a blanket LF-or-CRLF
-  rule — this file mixes both, so the right ending depends on exactly where you're inserting.
-- If a diff shows unintended line-ending flips, redo the edit as a byte-level patch (e.g. a small
-  Python script operating on the original bytes) that touches only the actual inserted/changed
-  bytes, rather than relying on the Edit tool for that hunk.
+All text files use LF line endings. Do not introduce CRLF.
 
 ## Verification preferences
 

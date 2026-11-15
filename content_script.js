@@ -8,8 +8,13 @@ document.addEventListener(
     true,
 );
 
+// In an SVG document, document.createElement does not make HTML elements.
+function createHtmlElement(tagName) {
+    return document.createElementNS("http://www.w3.org/1999/xhtml", tagName);
+}
+
 function decodeHTML(html) {
-    let element = document.createElement('div');
+    let element = createHtmlElement('div');
     element.innerHTML = html;
     return element.textContent;
 }
@@ -158,8 +163,23 @@ class BackgroundImageElement extends ImageElement {
     }
 }
 
+// An SVG file opened directly in a tab: the page itself is the image.
+class SvgDocumentElement extends ImageElement {
+    static canHandle(element) {
+        return element === document.documentElement && element instanceof SVGSVGElement;
+    }
+
+    locateImage() {
+        return window.location.href;
+    }
+
+    updateUrl(url) {
+        window.location.replace(url);
+    }
+}
+
 function getImageElement() {
-    const handlers = [ImgSrcsetElement, ImgElement, BackgroundImageElement];
+    const handlers = [ImgSrcsetElement, ImgElement, BackgroundImageElement, SvgDocumentElement];
 
     for (const child of [clickedElement].concat(Array.from(clickedElement.querySelectorAll("*")))) {
         for (const handler of handlers) {
@@ -176,14 +196,14 @@ function getImageElement() {
                 return new handler(parent);
             }
         }
-        for (const child of parent.childNodes) {
+        for (const child of parent.children) {
             for (const handler of handlers) {
                 if (handler.canHandle(child)) {
                     return new handler(child);
                 }
             }
         }
-        parent = parent.parentNode;
+        parent = parent.parentElement;
     }
 
     throw new Error("Could not find image element");
@@ -226,7 +246,7 @@ function saveImageAsPng() {
     img.crossOrigin = "anonymous";
 
     img.onload = () => {
-        const canvas = document.createElement("canvas");
+        const canvas = createHtmlElement("canvas");
         canvas.width = img.naturalWidth;
         canvas.height = img.naturalHeight;
         canvas.getContext("2d").drawImage(img, 0, 0);
@@ -236,10 +256,10 @@ function saveImageAsPng() {
                 if (!blob) return;
 
                 const blobUrl = URL.createObjectURL(blob);
-                const link = document.createElement("a");
+                const link = createHtmlElement("a");
                 link.href = blobUrl;
                 link.download = getPngFilename(url);
-                document.body.appendChild(link);
+                document.documentElement.appendChild(link);
                 link.click();
                 link.remove();
                 URL.revokeObjectURL(blobUrl);
